@@ -1,0 +1,7 @@
+metadata_version: 1
+name: 'Paper Title'
+description: 'Code for the paper, "Paper Title"'
+authors:
+- name: Adam Thorpe
+  affiliations:
+  - name: University of New Mexico
