@@ -1,11 +1,11 @@
-classdef comp_time < matlab.perftest.TestCase
+classdef comp_time_funcofM < matlab.perftest.TestCase
 % COMP_TIME Performance testing class to measure computation time of the
 % algorithm.
     
     properties
         
-        % Number of sample points.
-        M = 5625;
+        % Number of test points.
+        R = 10;
         
         % Variables to hold samples.
         xs
@@ -19,16 +19,16 @@ classdef comp_time < matlab.perftest.TestCase
         
     end
     
-    properties (TestParameter)
+    properties (MethodSetupParameter)
         
         % Range of the number of test points to test. 
-        NumberOfTestPoints = num2cell(1:50);
+        NumberOfSamplePoints = num2cell(100:500:8100);
         
     end
     
     methods (TestMethodSetup)
         
-        function setupAlgorithm(testCase)
+        function setupAlgorithm(testCase, NumberOfSamplePoints)
             
             % Sampling time.
             Ts = 0.25;
@@ -39,8 +39,8 @@ classdef comp_time < matlab.perftest.TestCase
             
             % Samples.
             testCase.xs = [
-                -1 + 2*rand(1, testCase.M);
-                -1 + 2*rand(1, testCase.M);
+                -1 + 2*rand(1, NumberOfSamplePoints);
+                -1 + 2*rand(1, NumberOfSamplePoints);
                 ];
 
             testCase.us = -1.1 + 2.2*rand(1, size(testCase.xs, 2));
@@ -53,7 +53,7 @@ classdef comp_time < matlab.perftest.TestCase
             testCase.c = vecnorm(testCase.ys);
             
             % Instantiate the algorithm.
-            testCase.alg = KernelControl('Lambda', 1/testCase.M^2, ...
+            testCase.alg = KernelControl('Lambda', 1/NumberOfSamplePoints^2, ...
                                             'Sigma', 0.25);
             
         end
@@ -62,11 +62,11 @@ classdef comp_time < matlab.perftest.TestCase
     
     methods (Test)
         
-        function testAlgorithmVaryingTestPoints(testCase, NumberOfTestPoints)
+        function testAlgorithmVaryingTestPoints(testCase)
 
             % Generate test points.
             rng(0);
-            xt = rand(2, NumberOfTestPoints);
+            xt = rand(2, 10);
             
             % Admissible control inputs.
             ur = linspace(-1, 1, 100);
@@ -79,30 +79,7 @@ classdef comp_time < matlab.perftest.TestCase
                                 
             testCase.stopMeasuring();
             
-            % Dummy condition.
-            testCase.verifyEqual(1, 1);
-            
         end
-        
-        function testOptimalAlgorithmVaryingTestPoints(testCase, NumberOfTestInputs)
-
-            % Generate test points.
-            rng(0);
-            xt = rand(2, NumberOfTestPoints);
-            
-            dynamics = @(x, u) A*x + B*u;
-
-            % Compute the results using the optimization based algorithm.
-            alg_opt = OptimalControl();
-            
-            testCase.startMeasuring();
-            
-            alg_opt.compute(dynamics, xt, [-1, 1]);
-            
-            testCase.stopMeasuring();
-            
-            % Dummy condition.
-            testCase.verifyEqual(1, 1);
         
     end
 end

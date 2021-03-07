@@ -116,3 +116,6 @@ yt = A*xt + B*U;
 
 D = yt - xt;
 quiver(xt(1, :), xt(2, :), D(1, :), D(2, :));
+
+% Save the figure as 'figure1'.
+saveas(gcf, '../results/figure1.png')

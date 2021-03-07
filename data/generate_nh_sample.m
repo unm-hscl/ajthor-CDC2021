@@ -1,4 +1,8 @@
-Ts = 0.25;
+Ts = 0.1;
+
+M = 8100;
+
+rng(0);
 
 % Generate the sample. 
 % r = linspace(-1, 1, 20);
@@ -12,17 +16,18 @@ Ts = 0.25;
 %     ];
 
 xs = [
-    -1.1 + 2.2*rand(1, 10000);
-    -1.1 + 2.2*rand(1, 10000);
-    -pi + 2*pi*rand(1, 10000)
+    -1.1 + 2.2*rand(1, M);
+    -1.1 + 2.2*rand(1, M);
+    -6 + 12*rand(1, M)
     ];
 
 % Cleanup.
 clear XX YY TT
 
+% us = rand(1, size(xs, 2));
 us = [
-    0.25*rand(1, size(xs, 2));
-    -(pi + 0.1) + 2*(pi + 0.1)*rand(1, size(xs, 2));
+    -0.1 + 1.2*rand(1, size(xs, 2));
+    -10.1 + 20.2*rand(1, size(xs, 2));
     ];
 
 % Propagate the dynamics forward.

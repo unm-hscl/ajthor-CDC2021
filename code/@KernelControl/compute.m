@@ -34,7 +34,7 @@ for k = 1:size(ur, 2)
 end
 
 [~, Idx] = min(w, [], 2);
-U = ur(Idx);
+U = ur(:, Idx);
 
 % Version 2
 
