@@ -17,7 +17,7 @@ disp('Computing kernel based solution...');
 
 % Kernel parameters.
 lambda = 1/(M^2);
-sigma = 1;
+sigma = 3;
 
 tic
 
@@ -46,7 +46,7 @@ X = [
 
 U = [];
 
-T_end = 25;
+T_end = 10;
 r_tracking = linspace(-1, 1, T_end);
 X_tracking = [r_tracking; r_tracking; pi/4*ones(size(r_tracking))];
 

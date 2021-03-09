@@ -21,8 +21,10 @@ Vk = zeros(N, M);
 cxy = rbf_kernel(xs, ys, obj.sigma_);
 cut = rbf_kernel(us, ur, obj.sigma_);
 
-beta = repmat(W*cxy, 1, 1, n);
-beta = permute(beta, [1 3 2]).*cut;
+a = W*cxy;
+
+% beta = repmat(W*cxy, 1, 1, n);
+% beta = permute(beta, [1 3 2]).*cut;
 
 Vk(N, :) = g(N, :);
 
@@ -30,12 +32,17 @@ for k = N-1:-1:2
     
     fprintf('Computing V(%d)...\n', k);
     
-    c = Vk(k+1, :); 
+    c = Vk(k+1, :);
     w = zeros(M, n);
-    for p = 1:n
-        w(:, p) = c*squeeze(beta(:, p, :));
+%     for p = 1:n
+%         w(:, p) = c*squeeze(beta(:, p, :));
+%     end
+
+    for p = 1:M
+        w(p, :) = c*(a(:, p).*cut);
     end
-    [~, Idx] = max(w, [], 2);
+    
+    [~, Idx] = min(w, [], 2);
     Uopt = ur(:, Idx);
 
     cup = rbf_kernel(us, Uopt, obj.sigma_);
@@ -47,6 +54,7 @@ for k = N-1:-1:2
 end
 
 Xtraj = x0;
+Utraj = [];
 
 for k = N-1:-1:1
     
@@ -61,10 +69,11 @@ for k = N-1:-1:1
     for p = 1:n
         w(:, p) = c*squeeze(beta(:, p, :));
     end
-    [~, Idx] = max(w, [], 2);
+    [~, Idx] = min(w, [], 2);
     Uopt = ur(:, Idx);
     
-    Xtraj = [Xtraj, f(Xtraj(:, end), Uopt)];
+    Xtraj = [Xtraj, f(Xtraj(:, end), Uopt)]; %#ok<AGROW>
+    Utraj = [Utraj, Uopt]; %#ok<AGROW>
 
 %     cup = rbf_kernel(us, Uopt, algorithm.sigma_);
 % 
@@ -95,7 +104,7 @@ end
 t_elapsed = toc(t_start);
 
 results.traj = Xtraj;
-% results.u_opt = U;
+results.u_opt = Utraj;
 results.comp_time = t_elapsed;
 
 end

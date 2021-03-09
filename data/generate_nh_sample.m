@@ -1,25 +1,25 @@
 Ts = 0.1;
 
-M = 8100;
+M = 1600;
 
 rng(0);
 
 % Generate the sample. 
-% r = linspace(-1, 1, 20);
-% t = linspace(-pi, pi, 20);
-% [XX, YY, TT] = ndgrid(r, r, t);
-% 
-% xs = [
-%     reshape(XX, 1, []);
-%     reshape(YY, 1, []);
-%     reshape(TT, 1, []);
-%     ];
+r = linspace(-1.1, 1.1, 15);
+t = linspace(-2*pi, 2*pi, 15);
+[XX, YY, TT] = ndgrid(r, r, t);
 
 xs = [
-    -1.1 + 2.2*rand(1, M);
-    -1.1 + 2.2*rand(1, M);
-    -6 + 12*rand(1, M)
+    reshape(XX, 1, []);
+    reshape(YY, 1, []);
+    reshape(TT, 1, []);
     ];
+
+% xs = [
+%     -1.1 + 2.2*rand(1, M);
+%     -1.1 + 2.2*rand(1, M);
+%     -6 + 12*rand(1, M)
+%     ];
 
 % Cleanup.
 clear XX YY TT

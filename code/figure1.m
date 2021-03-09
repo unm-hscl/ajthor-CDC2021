@@ -46,7 +46,7 @@ yt = A*xt + B*U;
 %% Plot the results.
 
 figure('Units', 'points', ...
-       'Position', [0, 0, 180, 180]);
+       'Position', [0, 0, 240, 240]);
 ax = axes; 
 ax.NextPlot = 'add';
 ax.Units = 'points';
@@ -118,4 +118,4 @@ D = yt - xt;
 quiver(xt(1, :), xt(2, :), D(1, :), D(2, :));
 
 % Save the figure as 'figure1'.
-saveas(gcf, '../results/figure1.png')
+% saveas(gcf, '../results/figure1.png')
