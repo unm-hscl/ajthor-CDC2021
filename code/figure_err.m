@@ -95,7 +95,7 @@ for k = 1:length(M_range)
 
     yt = A*xt + B*U;
     
-    E(k) = mean(vecnorm(yt - y_opt, 2).^2);
+    E(k) = max(vecnorm(yt - y_opt, 2).^2);
     
 end
 
@@ -135,7 +135,7 @@ for k = 1:length(M_range)
 
     yt = A*xt + B*U;
     
-    E_beta(k) = mean(vecnorm(yt - y_opt, 2).^2);
+    E_beta(k) = max(vecnorm(yt - y_opt, 2).^2);
     
 end
 
@@ -175,7 +175,7 @@ for k = 1:length(M_range)
 
     yt = A*xt + B*U;
     
-    E_exp(k) = mean(vecnorm(yt - y_opt, 2).^2);
+    E_exp(k) = max(vecnorm(yt - y_opt, 2).^2);
     
 end
 
@@ -192,7 +192,7 @@ ax.Units = 'points';
 ax.XLabel.Interpreter = 'latex';
 ax.XLabel.String = 'Sample Size $$M$$';
 ax.YLabel.Interpreter = 'latex';
-ax.YLabel.String = 'Mean Error';
+ax.YLabel.String = 'Max Error';
 set(ax, 'FontSize', 8);
 
 grid on
