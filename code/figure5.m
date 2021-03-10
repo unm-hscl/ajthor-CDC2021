@@ -76,7 +76,7 @@ toc
 %% Plot the results.
 
 figure('Units', 'points', ...
-       'Position', [0, 0, 240, 120]);
+       'Position', [0, 0, 240, 180]);
 ax = axes;
 ax.NextPlot = 'add';
 ax.Units = 'points';

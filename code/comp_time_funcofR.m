@@ -5,7 +5,7 @@ classdef comp_time_funcofR < matlab.perftest.TestCase
     properties
         
         % Number of sample points.
-        M = 5625;
+        M = 1600;
         
         % Variables to hold samples.
         xs
@@ -54,7 +54,7 @@ classdef comp_time_funcofR < matlab.perftest.TestCase
             
             % Instantiate the algorithm.
             testCase.alg = KernelControl('Lambda', 1/testCase.M^2, ...
-                                            'Sigma', 0.25);
+                                            'Sigma', 1);
             
         end
         

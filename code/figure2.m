@@ -37,7 +37,7 @@ ut = linspace(-1, 1, n);
 
 % Kernel parameters.
 lambda = 1/(M^2);
-sigma = 0.2;
+sigma = 1;
 
 %% Compute the kernel solution (beta disturbance).
 

@@ -4,7 +4,7 @@ M = 1600;
 
 rng(0);
 
-% Generate the sample. 
+% % Generate the sample. 
 r = linspace(-1.1, 1.1, 12);
 t = linspace(-2*pi, 2*pi, 12);
 [XX, YY, TT] = ndgrid(r, r, t);
@@ -18,7 +18,7 @@ xs = [
 % xs = [
 %     -1.1 + 2.2*rand(1, M);
 %     -1.1 + 2.2*rand(1, M);
-%     -6 + 12*rand(1, M)
+%     -3*pi + 3*pi*rand(1, M)
 %     ];
 
 % Cleanup.

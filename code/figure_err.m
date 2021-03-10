@@ -52,6 +52,10 @@ n = 100;
 % Set of admissible control actions.
 ur = linspace(-1, 1, n);
 
+% Kernel parameters.
+lambda = 1/(M^2);
+sigma = 1;
+
 % Number of samples.
 M_range = 100:500:8500;
 
@@ -62,10 +66,6 @@ E = zeros(size(M_range));
 for k = 1:length(M_range)
     
     M = M_range(k);
-
-    % Kernel parameters.
-    lambda = 1/(M^2);
-    sigma = 0.25;
 
     % Generate the sample used by the kernel regression. 
     xs = [
@@ -107,10 +107,6 @@ for k = 1:length(M_range)
     
     M = M_range(k);
 
-    % Kernel parameters.
-    lambda = 1/(M^2);
-    sigma = 0.25;
-
     % Generate the sample used by the kernel regression. 
     xs = [
         -1 + 2*rand(1, M);
@@ -150,10 +146,6 @@ E_exp = zeros(size(M_range));
 for k = 1:length(M_range)
     
     M = M_range(k);
-
-    % Kernel parameters.
-    lambda = 1/(M^2);
-    sigma = 0.25;
 
     % Generate the sample used by the kernel regression. 
     xs = [
@@ -206,8 +198,8 @@ set(ax, 'FontSize', 8);
 grid on
 
 xlim([0, 8000])
-ylim([0, 0.11])
-yticks(0.01:0.02:0.11)
+% ylim([0, 0.11])
+% yticks(0.01:0.02:0.11)
 
 plot(M_range, E);
 plot(M_range, E_beta);

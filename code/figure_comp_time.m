@@ -31,6 +31,9 @@ set(ax, 'FontSize', 8);
 
 errorbar(1:5:51, mean_times, min_times, max_times);
 
+set(ax, 'YScale', 'log')
+grid on
+
 %% Run performance tests.
 results = runperf('comp_time_funcofR/testAlgorithmVaryingTestPoints');
 
