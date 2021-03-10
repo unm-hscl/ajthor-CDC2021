@@ -19,4 +19,9 @@ end
 
 y = y(size(y, 1), :).';
 
+
+if abs(y(3)) >= 2*pi
+    y(3) = mod(y(3), 2*pi);
+end
+
 end

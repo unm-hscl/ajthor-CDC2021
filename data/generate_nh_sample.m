@@ -5,8 +5,8 @@ M = 1600;
 rng(0);
 
 % Generate the sample. 
-r = linspace(-1.1, 1.1, 15);
-t = linspace(-2*pi, 2*pi, 15);
+r = linspace(-1.1, 1.1, 12);
+t = linspace(-2*pi, 2*pi, 12);
 [XX, YY, TT] = ndgrid(r, r, t);
 
 xs = [

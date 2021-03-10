@@ -29,7 +29,7 @@ x0 = [
 
 tic
 
-T_end = 10;
+T_end = 25;
 r_tracking = linspace(-1, 1, T_end);
 X_tracking = [r_tracking; r_tracking; pi/4*ones(size(r_tracking))];
 
@@ -73,7 +73,7 @@ Vk = zeros(N, M);
 cxy = rbf_kernel(xs, ys, sigma);
 cut = rbf_kernel(us, ur, sigma);
 
-a = W*cxy;
+% a = W*cxy;
 % beta = repmat(W*cxy, 1, 1, n);
 % beta = permute(beta, [1 3 2]).*cut;
 
@@ -85,19 +85,27 @@ for k = N-1:-1:1
     
     fprintf('Computing V(%d)...\n', k);
     
-    c = g(k, :) + discount_factor*Vk(k+1, :);
+    c = Vk(k+1, :);
+    Z = c*W;
+    
     w = zeros(M, n);
 %     for p = 1:n
 %         w(:, p) = c*squeeze(beta(:, p, :));
+% %         w(:, p) = c*(a*cut);
 %     end
 
     for p = 1:M
-        w(p, :) = c*(a(:, p).*cut);
+% %         w(p, :) = c*(a(:, p).*cut);
+%         sth = (a(:, p).*cut);
+% %         sth = sth./sum(abs(sth), 1);
+%         w(p, :) = c*sth;
+% %         w(p, :) = c*a;
+        w(p, :) = Z*(rbf_kernel(xs, ys(:, p), sigma).*cut);
     end
     
     [V, Idx] = min(w, [], 2);
-%     Uopt = ur(:, Idx);
-% 
+    Uopt = ur(:, Idx);
+
 %     cup = rbf_kernel(us, Uopt, sigma);
 % 
 %     gamma = cxy.*cup;
@@ -106,7 +114,10 @@ for k = N-1:-1:1
 %     Vk(k, :) = g(k, :) + (Vk(k+1, :))*gamma;
 % %     Vk(k, :) = c*gamma;
 
-    Vk(k, :) = V;
+    Vk(k, :) = g(k, :) + V.';
+    
+%     figure, surf(reshape(Vk(k, 1:144), 12, 12)), view([0 90]), title(num2str(k))
+
 end
 
 %%
@@ -123,10 +134,13 @@ for k = 1:N
 %     beta = repmat(W*cxt, 1, 1, n);
 %     beta = permute(beta, [1 3 2]).*cut;
     beta = W*(cxt.*cut);
+%     beta = beta./sum(abs(beta), 1);
 
     c = Vk(k, :); 
 %     c = g(k, :);
+
     w = zeros(1, n);
+    
 %     for p = 1:n
 %         w(:, p) = c*squeeze(beta(:, p, :));
 %         w(:, p) = c*beta(:, p);
@@ -153,9 +167,9 @@ X = Xtraj;
 
 %% Plot the results.
 
-figure
-% figure('Units', 'points', ...
-%        'Position', [0, 0, 240, 120]);
+% figure
+figure('Units', 'points', ...
+       'Position', [0, 0, 240, 120]);
 ax = axes;
 ax.NextPlot = 'add';
 ax.Units = 'points';
@@ -173,6 +187,9 @@ ylim([-1, 1])
 plot(X_tracking(1, :), X_tracking(2, :), 'kx:');
 plot(X(1, :), X(2, :), '^--');
 
+%%
+% pause(2); close
+% for k = 1:N, figure, surf(reshape(Vk(k, 1:144), 12, 12)), view([0 90]), title(num2str(k)), end
 
 function G = rbf_kernel(X, Y, sigma)
 % RBF_KERNEL Compute kernel matrix.

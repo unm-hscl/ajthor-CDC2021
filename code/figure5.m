@@ -46,7 +46,7 @@ X = [
 
 U = [];
 
-T_end = 10;
+T_end = 25;
 r_tracking = linspace(-1, 1, T_end);
 X_tracking = [r_tracking; r_tracking; pi/4*ones(size(r_tracking))];
 

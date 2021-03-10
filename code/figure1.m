@@ -69,11 +69,11 @@ quiver(xt(1, :), xt(2, :), D(1, :), D(2, :));
 disp('Computing kernel based solution...');
 
 % Number of samples.
-M = 5625;
+M = 1600;
 
 % Kernel parameters.
 lambda = 1/(M^2);
-sigma = 0.25;
+sigma = 1;
 
 % Generate the sample used by the kernel regression. 
 xs = [
