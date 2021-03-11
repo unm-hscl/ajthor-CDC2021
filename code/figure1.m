@@ -5,7 +5,7 @@
 rng(0);
 
 % Load the sample.
-load('sample_di.mat');
+load('../data/sample_di.mat');
 
 % Create a grid of test points.
 r = linspace(-1, 1, 11);

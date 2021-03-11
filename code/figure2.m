@@ -23,7 +23,7 @@ disp('Computing kernel based solution (beta)...');
 ur = linspace(-1, 1, 100);
 
 % Load the sample.
-load('sample_di_beta.mat');
+load('../data/sample_di_beta.mat');
 
 tic 
 
@@ -49,7 +49,7 @@ disp('Computing kernel based solution (exponential)...');
 ur = linspace(-1, 1, 100);
 
 % Load the sample.
-load('sample_di_exp.mat');
+load('../data/sample_di_exp.mat');
 
 tic 
 
