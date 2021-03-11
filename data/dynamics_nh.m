@@ -16,6 +16,8 @@ end
 y = y(size(y, 1), :).';
 
 % We constrain the angle of the system to be within the range [0, 2*pi].
-y(3) = mod(y(3), 2*pi);
+if abs(y(3)) >= 2*pi
+    y(3) = mod(y(3), 2*pi);
+end
 
 end
