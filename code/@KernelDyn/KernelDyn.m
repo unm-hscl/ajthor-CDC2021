@@ -1,27 +1,14 @@
-classdef KernelDyn < handle
-% KERNELCONTROL An algorithm.
-
-    properties (Access = private)
-
-        % Algorithm parameters.
-        lambda_ (1, 1) double = 1
-        sigma_ (1, 1) double = 0.1
-
-    end
+classdef KernelDyn < KernelBase
+% KERNELDYN Kernel-based dynamic programming algorithm for computing an
+% optimal control sequence backwards in time. 
 
     methods
         function obj = KernelDyn(varargin)
-        % KERNELCONTROL Create an instance of the algorithm.
+        % KERNELDYN Create an instance of the algorithm.
 
             % Initialization code.
             
-            p = inputParser;
-            addParameter(p, 'Lambda', 1, @(arg) validateattributes(arg, {'numeric'}, {'nonnegative'}));
-            addParameter(p, 'Sigma', 0.1, @(arg) validateattributes(arg, {'numeric'}, {'nonnegative'}));
-            parse(p, varargin{:});
-            
-            obj.lambda_ = p.Results.Lambda;
-            obj.sigma_ = p.Results.Sigma;
+            obj = obj@KernelBase(varargin{:});
 
         end
     end

@@ -1,110 +1,71 @@
-function results = compute(obj, xs, us, ys, x0, ur, N, g, f)
+function results = compute(obj, xs, us, ys, x0, ur, N, cost, dynamics)
 % COMPUTE Computes the results.
 
 % Algorithm implementation.
 
 M = size(xs, 2);
-n = size(ur, 2); %#ok<NASGU>
+n = size(ur, 2); 
 
 t_start = tic;
 
 % Compute the kernel matrix.
-Gx = rbf_kernel(xs, xs, obj.sigma_);
-Gu = rbf_kernel(us, us, obj.sigma_);
-
+Gx = rbf_kernel(xs, xs, obj.Sigma);
+Gu = rbf_kernel(us, us, obj.Sigma);
 G = Gx.*Gu;
+clear Gx Gu
 
-W = inv(G + obj.lambda_*M*eye(size(G))); %#ok<*MINV>
+W = inv(G + obj.Lambda*M*eye(size(G)));
 
 Vk = zeros(N, M);
 
-cxy = rbf_kernel(xs, ys, obj.sigma_);
-cut = rbf_kernel(us, ur, obj.sigma_);
+% cxy = rbf_kernel(xs, ys, obj.Sigma);
+cut = rbf_kernel(us, ur, obj.Sigma);
 
-a = W*cxy;
+Vk(N, :) = cost(N);
 
-% beta = repmat(W*cxy, 1, 1, n);
-% beta = permute(beta, [1 3 2]).*cut;
-
-Vk(N, :) = g(N, :);
-
-for k = N-1:-1:2
+for t = N-1:-1:1
     
-    fprintf('Computing V(%d)...\n', k);
+    fprintf('Computing V(%d)...\n', t);
     
-    c = Vk(k+1, :);
+    c = Vk(t+1, :);
+    Z = c*W; %#ok<MINV>
+    
     w = zeros(M, n);
-%     for p = 1:n
-%         w(:, p) = c*squeeze(beta(:, p, :));
-%     end
 
     for p = 1:M
-        w(p, :) = c*(a(:, p).*cut);
+        w(p, :) = Z*(rbf_kernel(xs, ys(:, p), obj.Sigma).*cut);
     end
     
-    [~, Idx] = min(w, [], 2);
-    Uopt = ur(:, Idx);
-
-    cup = rbf_kernel(us, Uopt, obj.sigma_);
-
-    gamma = cxy.*cup;
-    gamma = W*gamma;
-
-    Vk(k, :) = g(k, :) + (Vk(k+1, :))*gamma;
-end
-
-Xtraj = x0;
-Utraj = [];
-
-for k = N-1:-1:1
-    
-    fprintf('Computing X(%d)...\n', k);
-    
-    cxt = rbf_kernel(xs, Xtraj(:, end), obj.sigma_);
-    beta = repmat(W*cxt, 1, 1, n);
-    beta = permute(beta, [1 3 2]).*cut;
-
-    c = Vk(k+1, :); 
-    w = zeros(1, n);
-    for p = 1:n
-        w(:, p) = c*squeeze(beta(:, p, :));
-    end
-    [~, Idx] = min(w, [], 2);
-    Uopt = ur(:, Idx);
-    
-    Xtraj = [Xtraj, f(Xtraj(:, end), Uopt)]; %#ok<AGROW>
-    Utraj = [Utraj, Uopt]; %#ok<AGROW>
-
-%     cup = rbf_kernel(us, Uopt, algorithm.sigma_);
-% 
-%     gamma = cxt.*cup;
-%     gamma = W*gamma;
-
-%     Pr(k, :) = (Vk(k+1, :)*gamma);
+    [V, ~] = min(w, [], 2);
+    Vk(t, :) = cost(t) + V.';
     
 end
 
-% % Compute the "kernel" matrix of input samples vs. input points.
-% Ups = rbf_kernel(us, ur, obj.sigma_);
-% 
-% % Variable to hold results corresponding to each test point.
-% U = zeros(size(ur, 1), size(xt, 2));
-% 
-% Z = c*W; %#ok<MINV>
-% w = zeros(size(xt, 2), size(ur, 2));
-% beta = repmat(rbf_kernel(xs, xt, obj.sigma_), 1, 1, size(ur, 2));
-% beta = permute(beta, [1 3 2]).*Ups;
-% for k = 1:size(ur, 2)
-%     w(:, k) = Z*squeeze(beta(:, k, :));
-% end
-% 
-% [~, Idx] = min(w, [], 2);
-% U = ur(:, Idx);
+X = [];
+U = [];
+
+X = [X, x0]; 
+
+for t = 1:N
+    
+    cxt = rbf_kernel(xs, X(:, end), obj.Sigma);
+    beta = W*(cxt.*cut); %#ok<MINV>
+
+    c = Vk(t, :); 
+    
+    w = c*beta;
+    [~, Idx] = min(w, [], 2);
+    Uopt = ur(:, Idx);
+    
+    X = [X, dynamics(X(:, end), Uopt)]; %#ok<AGROW>
+    U = [U, Uopt]; %#ok<AGROW>
+    
+end
 
 t_elapsed = toc(t_start);
 
-results.traj = Xtraj;
-results.u_opt = Utraj;
+results.x_traj = X;
+results.u_traj = U;
 results.comp_time = t_elapsed;
 
 end

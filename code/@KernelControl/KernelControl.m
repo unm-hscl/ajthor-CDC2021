@@ -1,13 +1,6 @@
-classdef KernelControl < handle
-% KERNELCONTROL An algorithm.
-
-    properties (Access = private)
-
-        % Algorithm parameters.
-        lambda_ (1, 1) double = 1
-        sigma_ (1, 1) double = 0.1
-
-    end
+classdef KernelControl < KernelBase
+% KERNELCONTROL Kernel based stochastic optimal control algorithm for
+% computing the one step optimal control actions.
 
     methods
         function obj = KernelControl(varargin)
@@ -15,13 +8,7 @@ classdef KernelControl < handle
 
             % Initialization code.
             
-            p = inputParser;
-            addParameter(p, 'Lambda', 1, @(arg) validateattributes(arg, {'numeric'}, {'nonnegative'}));
-            addParameter(p, 'Sigma', 0.1, @(arg) validateattributes(arg, {'numeric'}, {'nonnegative'}));
-            parse(p, varargin{:});
-            
-            obj.lambda_ = p.Results.Lambda;
-            obj.sigma_ = p.Results.Sigma;
+            obj = obj@KernelBase(varargin{:});
 
         end
     end
