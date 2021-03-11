@@ -1,7 +1,10 @@
 metadata_version: 1
-name: 'Paper Title'
-description: 'Code for the paper, "Paper Title"'
+name: 'Code for "Stochastic Optimal Control via Hilbert Space Embeddings of Distributions," CDC 2021'
+description: 'Code for the paper, "Stochastic Optimal Control via Hilbert Space Embeddings of Distributions," CDC 2021.'
 authors:
 - name: Adam Thorpe
+  affiliations:
+  - name: University of New Mexico
+- name: Meeko Oishi
   affiliations:
   - name: University of New Mexico
